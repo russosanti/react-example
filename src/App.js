@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+const size = 3;
+
 function Square({value, onSquareClick}) {
 
     return(
@@ -35,24 +37,12 @@ function Board({ xIsNext, squares, onPlay }) {
         status = "Next player: " + (xIsNext ? "X" : "O");
     }
 
+    const sq = createBoard(squares, handleClick);
+
     return (
         <>
             <div className="status">{status}</div>
-            <div className="board-row">
-                <Square value={squares[0]} onSquareClick={() => handleClick(0)}/>
-                <Square value={squares[1]} onSquareClick={() => handleClick(1)}/>
-                <Square value={squares[2]} onSquareClick={() => handleClick(2)}/>
-            </div>
-            <div className="board-row">
-                <Square value={squares[3]} onSquareClick={() => handleClick(3)}/>
-                <Square value={squares[4]} onSquareClick={() => handleClick(4)}/>
-                <Square value={squares[5]} onSquareClick={() => handleClick(5)}/>
-            </div>
-            <div className="board-row">
-                <Square value={squares[6]} onSquareClick={() => handleClick(6)}/>
-                <Square value={squares[7]} onSquareClick={() => handleClick(7)}/>
-                <Square value={squares[8]} onSquareClick={() => handleClick(8)}/>
-            </div>
+            {sq}
         </>
     );
 }
@@ -128,4 +118,30 @@ function calculateWinner(squares){
         }
     }
     return null;
+}
+
+function createBoard(squares, handleClick){
+    
+    let board = [];
+    let sqs;
+    let k;
+    
+    for (let i = 0; i <= size - 1; i++){
+        sqs = [];
+        for(let j = 0; j <= size - 1; j++){
+            let s = i*3 + j;
+            k = "square" + s;
+            sqs.push(<Square key={s} value={squares[s]} onSquareClick={() => handleClick(s)}/>);
+        }
+        board.push(
+            <div key={i} className="board-row">
+                {sqs}
+            </div>
+        );
+    }
+    return(
+        <>
+        {board}
+        </>
+    );
 }
