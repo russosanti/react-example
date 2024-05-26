@@ -56,7 +56,7 @@
     padding: 0;
   }
   
-  .square {
+  .square, .winner-square {
     background: #fff;
     border: 1px solid #999;
     float: left;
@@ -69,6 +69,10 @@
     padding: 0;
     text-align: center;
     width: 34px;
+  }
+
+  .winner-square {
+    background: #36ff51;
   }
   
   .board-row:after {
