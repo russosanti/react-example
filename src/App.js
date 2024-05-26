@@ -49,7 +49,11 @@ function Board({ xIsNext, squares, onPlay }) {
     if(winner){
         status = "Winner: " + squares[winner[0]];
     }else{
-        status = "Next player: " + (xIsNext ? "X" : "O");
+        if(gameEnded(squares)){
+            status = "It's a Draw";
+        }else{
+            status = "Next player: " + (xIsNext ? "X" : "O");
+        }
     }
 
     const sq = createBoard(squares, handleClick, winner);
@@ -175,4 +179,8 @@ function createBoard(squares, handleClick, winner){
         {board}
         </>
     );
+}
+
+function gameEnded(squares){
+    return squares.every(i => i !== null);
 }
