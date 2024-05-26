@@ -11,6 +11,15 @@ function Square({value, onSquareClick}) {
     );
 }
 
+function Sort({value, onSortClick}) {
+
+    return(
+        <button onClick={onSortClick}>
+        {value}
+        </button>
+    );
+}
+
 
 function Board({ xIsNext, squares, onPlay }) {
 
@@ -53,9 +62,11 @@ export default function Game(){
     const [currentMove, setCurrentMove] = useState(0);
     const xIsNext = currentMove % 2 === 0;
     const currentSquares = history[currentMove];
+    const [sortASC, setSortASC] = useState(true);
 
     function handlePlay(nextSquares) {
         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+        nextHistory.so
         setHistory(nextHistory);
         setCurrentMove(nextHistory.length - 1);
     }
@@ -64,7 +75,13 @@ export default function Game(){
         setCurrentMove(nextMove);
     }
 
-    const moves = history.map((history, move) => {
+    function handleSort() {
+        //const nextHistory = history.slice();
+        //nextHistory.sort().reverse();
+        setSortASC(!sortASC);
+    }
+
+    let moves = history.map((history, move) => {
         let description
         if(move > 0){
             description = 'Go to move #' + move;
@@ -87,12 +104,17 @@ export default function Game(){
         );
     });
 
+    if(!sortASC){
+        moves = moves.reverse();
+    }
+
     return (
         <div className="game">
           <div className="game-board">
             <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}/>
           </div>
           <div className="game-info">
+            <Sort value={"Sort"} onSortClick={handleSort}></Sort>
             <ol>{moves}</ol>
           </div>
         </div>
