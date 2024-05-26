@@ -2,7 +2,13 @@ import { useState } from 'react';
 
 const size = 3;
 
-function Square({value, onSquareClick}) {
+function Square({value, onSquareClick, color}) {
+
+    if(color && color === true){
+        return(
+            <button className="winner-square" onClick={onSquareClick}>{value}</button>
+        );    
+    }
 
     return(
         <button className="square" onClick={onSquareClick}>
@@ -41,12 +47,12 @@ function Board({ xIsNext, squares, onPlay }) {
     const winner = calculateWinner(squares);
     let status;
     if(winner){
-        status = "Winner: " + winner;
+        status = "Winner: " + squares[winner[0]];
     }else{
         status = "Next player: " + (xIsNext ? "X" : "O");
     }
 
-    const sq = createBoard(squares, handleClick);
+    const sq = createBoard(squares, handleClick, winner);
 
     return (
         <>
@@ -76,8 +82,6 @@ export default function Game(){
     }
 
     function handleSort() {
-        //const nextHistory = history.slice();
-        //nextHistory.sort().reverse();
         setSortASC(!sortASC);
     }
 
@@ -136,13 +140,13 @@ function calculateWinner(squares){
     for(let i = 0; i < lines.length; i++){
         const [a, b, c] = lines[i];
         if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]){
-            return squares[a];
+            return lines[i];
         }
     }
     return null;
 }
 
-function createBoard(squares, handleClick){
+function createBoard(squares, handleClick, winner){
     
     let board = [];
     let sqs;
@@ -153,7 +157,12 @@ function createBoard(squares, handleClick){
         for(let j = 0; j <= size - 1; j++){
             let s = i*3 + j;
             k = "square" + s;
-            sqs.push(<Square key={s} value={squares[s]} onSquareClick={() => handleClick(s)}/>);
+            if(winner && winner.includes(s)){
+                sqs.push(<Square key={s} value={squares[s]} onSquareClick={() => handleClick(s)}
+                color={true}/>);
+            }else{
+                sqs.push(<Square key={s} value={squares[s]} onSquareClick={() => handleClick(s)}/>);
+            }
         }
         board.push(
             <div key={i} className="board-row">
