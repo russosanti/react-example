@@ -93,7 +93,8 @@ export default function Game(){
         let description
         const coord = getCoordinates(history.coordinates);
         if(move > 0){
-            description = '(' + coord.fila + ';' + coord.columna + ')' + ' Go to move #' + move;
+            description = '(' + (coord.fila + 1) + ';' + (coord.columna + 1) +
+            ')' + ' Go to move #' + move;
         }else{
             description = 'Go to game start';
         }
