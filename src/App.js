@@ -41,7 +41,7 @@ function Board({ xIsNext, squares, onPlay }) {
         }else{
             nextSquares[i] = "O";
         }
-        onPlay(nextSquares);
+        onPlay(i, nextSquares);
     }
 
     const winner = calculateWinner(squares);
@@ -68,15 +68,15 @@ function Board({ xIsNext, squares, onPlay }) {
 
 export default function Game(){
     //Set to X if even
-    const [history, setHistory] = useState([Array(9).fill(null)]);
+    const [history, setHistory] = useState([{coordinates: null, hist: Array(9).fill(null)}]);
     const [currentMove, setCurrentMove] = useState(0);
     const xIsNext = currentMove % 2 === 0;
-    const currentSquares = history[currentMove];
+    const currentSquares = history[currentMove].hist;
     const [sortASC, setSortASC] = useState(true);
 
-    function handlePlay(nextSquares) {
-        const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-        nextHistory.so
+    function handlePlay(coordinates, nextSquares) {
+        const nextHistory = [...history.slice(0, currentMove + 1), {coordinates: coordinates, 
+            hist: nextSquares}];
         setHistory(nextHistory);
         setCurrentMove(nextHistory.length - 1);
     }
@@ -91,8 +91,9 @@ export default function Game(){
 
     let moves = history.map((history, move) => {
         let description
+        const coord = getCoordinates(history.coordinates);
         if(move > 0){
-            description = 'Go to move #' + move;
+            description = '(' + coord.fila + ';' + coord.columna + ')' + ' Go to move #' + move;
         }else{
             description = 'Go to game start';
         }
@@ -183,4 +184,8 @@ function createBoard(squares, handleClick, winner){
 
 function gameEnded(squares){
     return squares.every(i => i !== null);
+}
+
+function getCoordinates(numeroCasillero){
+    return { fila: Math.floor(numeroCasillero / 3), columna: numeroCasillero % 3 };
 }
